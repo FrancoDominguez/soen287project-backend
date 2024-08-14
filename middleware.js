@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import { jwtVerify } from 'jose';
 import User from './userModel.js';
 
 const jwtSecret = process.env.JWT_SECRET;
@@ -14,7 +14,7 @@ export async function authorize(request, response, next) {
     }
     const token = headers.split(' ')[1];
 
-    const decodedToken = jwt.verify(token, jwtSecret);
+    const decodedToken = jwtVerify(token, jwtSecret);
     console.log('Token is valid:', decodedToken);
 
     if (!decodedToken || decodedToken.secret !== jwtSecret) {
@@ -27,7 +27,7 @@ export async function authorize(request, response, next) {
     next();
   } catch (error) {
     console.error(error);
-    return response.status(500).json({ message: 'Invalid JWT token' });
+    return response.status(401).json({ message: 'Invalid JWT token' });
   }
 }
 

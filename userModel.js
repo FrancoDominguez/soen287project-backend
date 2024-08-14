@@ -1,5 +1,3 @@
-// userModel.js
-
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
@@ -19,9 +17,5 @@ const userSchema = new mongoose.Schema({
     match: /(?=.*[A-Z])(?=.*\d)/,
   },
 });
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
 
 export default mongoose.model('users', userSchema);

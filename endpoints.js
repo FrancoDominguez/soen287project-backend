@@ -1,11 +1,15 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import { SignJWT } from 'jose';
 import User from './userModel.js';
 import Pet from './petModel.js';
-const router = express.Router();
 import { authorize, findUserWithID } from './middleware.js';
 
-export async function register(request, response) {
+const router = express.Router();
+const jwtSecret = process.env.JWT_SECRET;
+
+
+
+async function register(request, response) {
   let user;
   let newUser;
   try {
@@ -38,7 +42,7 @@ export async function register(request, response) {
   }
 }
 
-export async function login(request, response) {
+async function login(request, response) {
   try {
     const email = request.body.email;
     const password = request.body.password;
@@ -50,9 +54,11 @@ export async function login(request, response) {
       console.log('Invalid password');
       return response.status(401).json({ message: 'Invalid password' });
     } else {
-      const token = jwt.sign({ _id: user._id }, jwtSecret, {
-        expiresIn: '30min',
-      });
+      const token = await new SignJWT({ _id: user._id })
+        .setProtectedHeader({ alg: 'HS256' })
+        .setExpirationTime('2h')
+        .sign(jwtSecret);
+
       console.log(`Successfully authenticated ${user.firstname} ${user.lastname}`);
       return response.status(200).json({
         message: `Successfully authenticated user ${user.firstname} ${user.lastname}`,
