@@ -23,11 +23,11 @@ function createServer() {
   return app;
 }
 
-const server = createServer();
+const app = createServer();
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server is live on http://localhost:${PORT}`);
   createMongooseConnection().catch(console.dir);
 });
 
-export default server;
+export default app;
