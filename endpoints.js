@@ -7,8 +7,6 @@ import { authorize, findUserWithID } from './middleware.js';
 const router = express.Router();
 const jwtSecret = process.env.JWT_SECRET;
 
-
-
 async function register(request, response) {
   let user;
   let newUser;
@@ -36,7 +34,6 @@ async function register(request, response) {
         response.status(400).json({ message: error.message });
       }
     } else {
-      console.error(error);
       response.status(500).json({ message: error.message });
     }
   }

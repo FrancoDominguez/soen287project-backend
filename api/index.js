@@ -11,11 +11,10 @@ async function createMongooseConnection() {
     await mongoose.connect(uri, clientOptions);
     await mongoose.connection.db.admin().command({ ping: 1 });
     console.log('Pinged your deployment. You successfully connected to MongoDB!');
-  } finally {
-    await mongoose.disconnect();
+  } catch (error) {
+    console.error('Error connecting to MongoDB:', error);
   }
 }
-
 function createServer() {
   const app = express();
   app.use(express.json());
